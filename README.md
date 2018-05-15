@@ -9,18 +9,18 @@ Tested with Android 4.1+ and iOS 10.
     npm install --save react-native-infinite-scroll
 
 ## Usage
+
 ```js
 <InfiniteScroll
-   // make sure to use a function signature, not this.loadMorePages()!
+  // make sure to use a function signature, not this.loadMorePages()!
   onLoadMoreAsync={this.loadMorePages}
-  horizontal={false}  // true - if you want in horizontal
+  horizontal={false} // true - if you want in horizontal
   style={styles.scrollView}
   {...prop}
 >
   {...children}
 </InfiniteScroll>
 ```
-
 
 ### Example
 
@@ -48,9 +48,14 @@ class Example extends Component ({
       dataSource: this.state.dataSource.cloneWithRows(rows)
     });
   },
+  scrollToTop(){
+    //assume that this method can be somehow triggered (e.g. by a Button component)
+    this.scrollview.scrollview.scrollTo({x : 0, y: 0, animated: true});
+  },
   render(){
     return (
       <InfiniteScroll
+        ref={scrollview => this.scrollview = scrollview}
         horizontal={false}  //true - if you want in horizontal
         onLoadMoreAsync={this.loadMorePage}
         distanceFromEnd={10} // distance in density-independent pixels from the right end
@@ -75,8 +80,9 @@ You can pass any [ScrollView](https://facebook.github.io/react-native/docs/scrol
 
 Plus you can provide the following:
 
-* `onLoadMoreAsync` [Function] *no default* reference callback to be executed whenever we reach the end of our scrolling area (the end is not represented by the right border but it's the right border - offset defined by `distanceFromEnd`)
-* `distanceFromEnd` [Number] *10* the distance we should call `onLoadMoreAsync` before to reach the right border, useful to get the content before the user hits the end (causing it to stop scrolling while content is loading). You should calculate this with regard to the needed time to render new content (network latency/computing time) and estimate your average item size. The right amount of dp is up to you.
+* `scrollview` [Field] allows you to get access to the embedded ScrollView, so you can call the methods in it (e.g. scrollTo) - see above example
+* `onLoadMoreAsync` [Function] _no default_ reference callback to be executed whenever we reach the end of our scrolling area (the end is not represented by the right border but it's the right border - offset defined by `distanceFromEnd`)
+* `distanceFromEnd` [Number] _10_ the distance we should call `onLoadMoreAsync` before to reach the right border, useful to get the content before the user hits the end (causing it to stop scrolling while content is loading). You should calculate this with regard to the needed time to render new content (network latency/computing time) and estimate your average item size. The right amount of dp is up to you.
 
 ## Credits
 
